@@ -1,12 +1,8 @@
 package shopeego
 
+// GetCategoriesRequest Request
 type GetCategoriesRequest struct {
-	// Partner ID is assigned upon registration is successful. Required for all requests.
-	PartnerID int64 `json:"partner_id,omitempty"`
-	// Shopee's unique identifier for a shop. Required for all requests.
-	ShopID int64 `json:"shopid,omitempty"`
-	// This is to indicate the timestamp of the request. Required for all requests.
-	Timestamp int `json:"timestamp,omitempty"`
+	CommonInfoRequest
 	// Indicate the translation language. Language values include: en(English), vi(Vietnamese), id(Indonesian), th(Thai), zh-Hant(Traditional Chinese), zh-Hans(Simplified Chinese), ms-my(Malaysian Malay). If the selected language is not supported in certain shop location, the response will be in default language.
 	Language string `json:"language,omitempty"`
 }

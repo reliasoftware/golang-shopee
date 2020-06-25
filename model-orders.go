@@ -1,6 +1,8 @@
 package shopeego
 
+// GetOrdersListRequest request
 type GetOrdersListRequest struct {
+	CommonInfoRequest
 	// The create_time_from and create_time_to fields specify a date range for retrieving orders (based on the order create time). The create_time_from field is the starting date range. The maximum date range that may be specified with the create_time_from and create_time_to fields is 15 days. Must include only create_time or update_time in the request.
 	CreateTimeFrom int `json:"create_time_from,omitempty"`
 	// The create_time_from and create_time_to fields specify a date range for retrieving orders (based on the order create time). The create_time_to field is the ending date range. The maximum date range that may be specified with the create_time_from and create_time_to fields is 15 days. Must include only create_time or update_time in the request.
@@ -14,12 +16,6 @@ type GetOrdersListRequest struct {
 	PaginationEntriesPerPage int `json:"pagination_entries_per_page,omitempty"`
 	// Specifies the starting entry of data to return in the current call. Default is 0. if data is more than one page, the offset can be some entry to start next call.
 	PaginationOffset int `json:"pagination_offset,omitempty"`
-	// Partner ID is assigned upon registration is successful. Required for all requests.
-	PartnerID int64 `json:"partner_id,omitempty"`
-	// Shopee's unique identifier for a shop. Required for all requests.
-	ShopID int64 `json:"shopid,omitempty"`
-	// This is to indicate the timestamp of the request. Required for all requests.
-	Timestamp int `json:"timestamp,omitempty"`
 }
 
 type GetOrdersListResponse struct {
