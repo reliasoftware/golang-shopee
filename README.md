@@ -1,54 +1,41 @@
-# ShopeeGo [![GoDoc](https://godoc.org/github.com/teacat/shopeego?status.svg)](https://godoc.org/github.com/teacat/shopeego) [![Coverage Status](https://coveralls.io/repos/github/teacat/shopeego/badge.svg?branch=master)](https://coveralls.io/github/teacat/shopeego?branch=master) [![Build Status](https://travis-ci.org/teacat/shopeego.svg?branch=master)](https://travis-ci.org/teacat/shopeego) [![Go Report Card](https://goreportcard.com/badge/github.com/teacat/rushia)](https://goreportcard.com/report/github.com/teacat/shopeego)
+# Official document
+https://open.shopee.com/documents
 
-由 [Golang](https://golang.org/) 所實作的 Shopee Open Platform API，包含所有 Shopee API v1 所提供的功能，這些功能都已經列舉在[本專案的 Go Doc](https://godoc.org/github.com/teacat/shopeego) 之中。使用方式詳見 [Shopee Open Platform Documentation](https://open.shopee.com/documents)。
-
-**注意：** Shopeego 是根據 Shopee 所提供的 API 文件與資料型態進行開發，但有些資料型態明顯是不正確的，這部份請參閱「[參差不齊的官方文件](#參差不齊的官方文件)」章節。
-
-# 安裝方式
-
-打開終端機並且透過 `go get` 安裝此套件即可。
+# Setup package
 
 ```bash
-$ go get gopkg.in/teacat/shopeego.v1
+$ go get github.com/reliasoftware/golang-shopee
 ```
 
-# 開始使用
-
-透過 `NewClient` 並傳入你的 Partner 金鑰，如此一來就可以初始化一個 Shopee 客戶端。
+# Usage
 
 ```golang
-// 初始化一個 Shopee 客戶端。
 client := shopeego.NewClient(&ClientOptions{
 	Secret: "0c2c7b3bd59c2503f49a307fcf49dc985df43a1214821d5453e9ba54ca8e2e44",
 })
 
-// 取得指定商店的資料。
+// Get data base on request
 shop := client.GetShopInfo(&GetShopInfoRequest{
 	PartnerID: 841237,
 	ShopID:    307271,
 	Timestamp: int(time.Now().Unix()),
 })
 
-fmt.Println(shop.ShopName) // 輸出：yamiodymel
+fmt.Println(shop.ShopName)
 ```
 
-# 參差不齊的官方文件
+# Note
 
-這個 API 套件在開發的時候發現了下列幾個問題。
+The following problems were discovered during the development of this API suite.
 
-* 有些[「必填欄位」被標註為「可選」](https://github.com/minchao/shopee-php/issues/5)。
-* 名為 `name` 的名稱欄位[但型態卻是 `float64` 或 `int`](https://open.shopee.com/documents?module=2&type=1&id=373)。
-* 欄位明明是 `float64` 但卻會收到空字串作為零值（這部份 Shopeego 已經透過[字串更換](https://github.com/teacat/shopeego/blob/master/replaces.go)將 `""` 改為 `"0"` 以便解析了）。
+Some "required fields" are marked as "optional" .
+Called namethe name of the field but type is float64orint .
+Field obviously float64but will receive an empty string as a zero value (this part Shopeego been through the replacement string will ""be changed "0"in order to resolve a).
+These problems you might encounter while using, when faced with API does not work properly or if there were error_param, consider the Issue in return.
 
-這些問題你可能會在使用時遇到，當遇到 API 無法正常使用或是出現 `error_param` 時，請考慮到 Issue 中回報。
+# Sign
 
-# 驗證介面
-
-欲連接的賣場必須授權給你的 [Shopee Open Platform 應用程式](https://open.shopee.com/documents?module=63&type=2&id=51) 才能夠與其對接。
-
-# 簽署
-
-這個套件仍然有幫你作這件事，但還是想讓你知道發生了什麼。應[蝦皮官方要求](https://open.shopee.com/documents?module=63&type=2&id=53)所有的請求都必須簽署 HMAC-SHA256，很明顯這是有點神奇的蹦蹦安全手段（畢竟都已經有了 HTTPS）。如果你不明白，這裡舉個範例。
+This kit still does this for you, but still wants you to know what happened. In response to the official request of Shrimp Skin, all requests must be signed with HMAC-SHA256. Obviously this is a somewhat magical security method (after all, HTTPS is already available). If you do not understand, here is an example.
 
 ```
 POST /api/v1/orders/detail HTTP/1.1
@@ -58,4 +45,4 @@ Authorization: b37c061daf2fcfa2baffe7539110938be5b7525041c147e78ad8afa78cc1a72d
 {"ordersn": "160726152598865", "shopid": 61299, "partner_id": 1, "timestamp": 1470198856}
 ```
 
-在請求標頭的 `Authorization` 欄位中，這個雜湊碼來自於「`請求網址|內容`」並透過你的 API 金鑰作為祕密（Secret）演算而成。
+In the request header Authorizationfield, the hash code from "Request URL|Content" and through your API key as a secret (Secret) calculation is made.
